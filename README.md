@@ -24,7 +24,7 @@ A fresh session should recover from those remote Issues and their explicit refer
 
 ## Capture and deliver a Receipt
 
-`tools/contract.py` supports only Issue URLs in this repository. It invokes the authenticated `gh` executable with argument arrays, parses the repository's Goal and Execution Issue Form headings, and never reads or stores credentials. Execution capture also verifies that the stated Goal is the Issue's native GitHub parent. Goal #1's original ``contract-id`` line is supported only when identifying that bootstrap parent; new Goals must use the current Goal Issue Form.
+`tools/contract.py` supports only Issue URLs in this repository. It invokes the authenticated `gh` executable with argument arrays, parses only the current Chinese headings emitted by the repository's Goal and Execution Issue Forms, and never reads or stores credentials. Obsolete English heading aliases are intentionally rejected so the forms and parser have one format. Execution capture also verifies that the stated Goal is the Issue's native GitHub parent. Goal #1's original ``contract-id`` line is supported only when identifying that bootstrap parent; new Goals must use the current Chinese Goal Issue Form.
 
 Capture an Issue into the ignored, regenerable `run-packages/` directory:
 

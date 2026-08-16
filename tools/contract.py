@@ -30,33 +30,33 @@ BOOTSTRAP_GOAL_NUMBER = 1
 BOOTSTRAP_GOAL_ID = "goal-agent-contracts-001"
 
 EXECUTION_FIELDS = {
-    "Contract ID": "contractId",
-    "Revision": "revision",
-    "Immutable contract reference": "contractRef",
-    "Parent Goal": "parentGoal",
-    "Current objective": "objective",
-    "In scope": "scopeIn",
-    "Out of scope": "scopeOut",
-    "Completion criteria": "successCriteria",
-    "Authority and read-only sources": "authorities",
-    "Allowed actions and writes": "permissionsAllowed",
-    "Forbidden actions and writes": "permissionsForbidden",
-    "Dependencies": "dependencies",
-    "Deliverables": "deliverables",
-    "Stop conditions": "stopConditions",
-    "Current owner action": "ownerAction",
+    "合同 ID": "contractId",
+    "修订版本": "revision",
+    "不可变合同引用": "contractRef",
+    "父目标": "parentGoal",
+    "当前目标": "objective",
+    "范围内": "scopeIn",
+    "范围外": "scopeOut",
+    "完成标准": "successCriteria",
+    "权威与只读来源": "authorities",
+    "允许的动作与写入": "permissionsAllowed",
+    "禁止的动作与写入": "permissionsForbidden",
+    "依赖": "dependencies",
+    "交付物": "deliverables",
+    "停止条件": "stopConditions",
+    "当前负责人动作": "ownerAction",
 }
 GOAL_FIELDS = {
-    "Contract ID": "contractId",
-    "Objective": "objective",
-    "Success criteria": "successCriteria",
-    "Authority and references": "authorities",
-    "Allowed actions and writes": "permissionsAllowed",
-    "Forbidden actions and writes": "permissionsForbidden",
-    "Dependencies": "dependencies",
-    "Deliverables": "deliverables",
-    "Stop conditions": "stopConditions",
-    "Current owner action": "ownerAction",
+    "合同 ID": "contractId",
+    "目标": "objective",
+    "成功标准": "successCriteria",
+    "权威与引用": "authorities",
+    "允许的动作与写入": "permissionsAllowed",
+    "禁止的动作与写入": "permissionsForbidden",
+    "依赖": "dependencies",
+    "交付物": "deliverables",
+    "停止条件": "stopConditions",
+    "当前负责人动作": "ownerAction",
 }
 PARENT_QUERY = (
     "query($owner:String!,$name:String!,$number:Int!){"
@@ -259,9 +259,9 @@ def _source(issue: Mapping[str, Any]) -> dict[str, Any]:
 
 def _goal_contract_id(parent_issue: Mapping[str, Any]) -> str:
     body = parent_issue["body"]
-    if "### Contract ID" in body:
+    if "### 合同 ID" in body:
         fields = _parse_sections(body, GOAL_FIELDS)
-        contract_id = _scalar(fields["contractId"], "Contract ID")
+        contract_id = _scalar(fields["contractId"], "合同 ID")
     elif parent_issue["number"] == BOOTSTRAP_GOAL_NUMBER:
         match = re.match(r"\A`contract-id: (goal-[a-z0-9][a-z0-9-]*)`(?:\r?\n|\Z)", body)
         if not match or match.group(1) != BOOTSTRAP_GOAL_ID:
@@ -276,7 +276,7 @@ def _goal_contract_id(parent_issue: Mapping[str, Any]) -> str:
 
 def capture_goal(issue: Mapping[str, Any]) -> dict[str, Any]:
     fields = _parse_sections(issue["body"], GOAL_FIELDS)
-    contract_id = _scalar(fields["contractId"], "Contract ID")
+    contract_id = _scalar(fields["contractId"], "合同 ID")
     if not GOAL_ID_RE.fullmatch(contract_id):
         raise ContractError("Goal Contract ID is malformed")
     package = {
@@ -302,10 +302,10 @@ def capture_goal(issue: Mapping[str, Any]) -> dict[str, Any]:
 
 def capture_execution(issue: Mapping[str, Any], client: GhClient) -> dict[str, Any]:
     fields = _parse_sections(issue["body"], EXECUTION_FIELDS)
-    contract_id = _scalar(fields["contractId"], "Contract ID")
-    revision_text = _scalar(fields["revision"], "Revision")
-    contract_ref = _scalar(fields["contractRef"], "Immutable contract reference")
-    parent_url = _scalar(fields["parentGoal"], "Parent Goal")
+    contract_id = _scalar(fields["contractId"], "合同 ID")
+    revision_text = _scalar(fields["revision"], "修订版本")
+    contract_ref = _scalar(fields["contractRef"], "不可变合同引用")
+    parent_url = _scalar(fields["parentGoal"], "父目标")
     if not CONTRACT_ID_RE.fullmatch(contract_id):
         raise ContractError("Execution Contract ID is malformed")
     if not re.fullmatch(r"[1-9][0-9]*", revision_text):
@@ -363,7 +363,7 @@ def capture(url: str, client: GhClient) -> dict[str, Any]:
     issue = client.issue(number)
     if issue["url"] != url:
         raise ContractError("captured Issue URL differs from the requested URL")
-    if "### Immutable contract reference" in issue["body"]:
+    if "### 不可变合同引用" in issue["body"]:
         return capture_execution(issue, client)
     return capture_goal(issue)
 

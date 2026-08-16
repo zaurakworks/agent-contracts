@@ -1,118 +1,118 @@
 # contract-schema: schemas/execution-contract.schema.json
-name: Execution Contract
-description: Authorize one bounded execution against a parent Goal.
-title: "Execution: "
+name: 执行合同
+description: 针对父目标授权一次边界明确的执行。
+title: "执行合同："
 body:
   - type: markdown
     attributes:
       value: |
-        After creation, register this Issue as a GitHub sub-issue of its parent Goal; a textual link alone is not sufficient. Bind execution to this Issue's exact contract ID and revision. GitHub remains authoritative; local packages and pull requests are not acceptance.
+        创建后，必须把本 Issue 注册为父 Goal 的 GitHub 子 Issue；仅有文本链接并不充分。执行必须绑定本 Issue 精确的合同 ID 与修订版本。GitHub 始终是权威；本地执行包和 Pull Request 不代表验收。
   - type: input
     id: contractId
     attributes:
-      label: Contract ID
-      description: Stable ID beginning with exec-, for example exec-agent-contracts-foundation-001.
+      label: 合同 ID
+      description: 以 exec- 开头的稳定 ID，例如 exec-agent-contracts-foundation-001。
       placeholder: exec-example-001
     validations:
       required: true
   - type: input
     id: revision
     attributes:
-      label: Revision
-      description: Positive integer. Material contract changes require an explicit new revision.
+      label: 修订版本
+      description: 正整数。合同发生实质变化时，必须明确产生新的修订版本。
       placeholder: "1"
     validations:
       required: true
   - type: input
     id: contractRef
     attributes:
-      label: Immutable contract reference
-      description: Exact contractId@revision binding for this execution.
+      label: 不可变合同引用
+      description: 本次执行精确的 contractId@revision 绑定。
       placeholder: exec-example-001@1
     validations:
       required: true
   - type: input
     id: parentGoal
     attributes:
-      label: Parent Goal
-      description: URL of the authoritative Goal Contract Issue that will own this Issue as a GitHub sub-issue.
+      label: 父目标
+      description: 将通过 GitHub 原生子 Issue 关系拥有本 Issue 的权威 Goal Contract Issue URL。
       placeholder: https://github.com/owner/repository/issues/1
     validations:
       required: true
   - type: textarea
     id: objective
     attributes:
-      label: Current objective
-      description: State the bounded outcome for this execution.
+      label: 当前目标
+      description: 说明本次执行边界明确的结果。
     validations:
       required: true
   - type: textarea
     id: scopeIn
     attributes:
-      label: In scope
-      description: List the exact systems, repositories, paths, and operations included.
+      label: 范围内
+      description: 列出明确包含的系统、仓库、路径和操作。
     validations:
       required: true
   - type: textarea
     id: scopeOut
     attributes:
-      label: Out of scope
-      description: List exclusions and non-goals explicitly.
+      label: 范围外
+      description: 明确列出排除项和非目标。
     validations:
       required: true
   - type: textarea
     id: successCriteria
     attributes:
-      label: Completion criteria
-      description: List independently observable criteria, one per line.
+      label: 完成标准
+      description: 每行列出一项可以独立观察的标准。
     validations:
       required: true
   - type: textarea
     id: authorities
     attributes:
-      label: Authority and read-only sources
-      description: List the parent Goal, this Issue, and any expressly incorporated URLs with their roles.
+      label: 权威与只读来源
+      description: 列出父 Goal、本 Issue 以及明确纳入的 URL，并说明各自角色。
     validations:
       required: true
   - type: textarea
     id: permissionsAllowed
     attributes:
-      label: Allowed actions and writes
-      description: Enumerate repositories, paths, remote operations, and resources that are authorized.
+      label: 允许的动作与写入
+      description: 枚举获准使用的仓库、路径、远端操作和资源。
     validations:
       required: true
   - type: textarea
     id: permissionsForbidden
     attributes:
-      label: Forbidden actions and writes
-      description: Enumerate explicit exclusions, including global or cross-repository boundaries.
+      label: 禁止的动作与写入
+      description: 枚举明确排除的动作，包括全局和跨仓库边界。
     validations:
       required: true
   - type: textarea
     id: dependencies
     attributes:
-      label: Dependencies
-      description: List prerequisite Issues, decisions, or artifacts with required states. Enter None when empty.
+      label: 依赖
+      description: 列出作为前提的 Issue、决定或产物及其所需状态。没有依赖时填写 None。
     validations:
       required: true
   - type: textarea
     id: deliverables
     attributes:
-      label: Deliverables
-      description: List exact files, remote records, branch or PR requirements, and receipt expectations.
+      label: 交付物
+      description: 列出精确文件、远端记录、分支或 PR 要求以及回执预期。
     validations:
       required: true
   - type: textarea
     id: stopConditions
     attributes:
-      label: Stop conditions
-      description: Include authority drift, permission gaps, and execution-specific blockers.
+      label: 停止条件
+      description: 包括权威漂移、权限缺口和本次执行特有的阻塞条件。
     validations:
       required: true
   - type: textarea
     id: ownerAction
     attributes:
-      label: Current owner action
-      description: Name the responsible actor and the single next action. Update this field or an authoritative comment before handoff.
+      label: 当前负责人动作
+      description: 指明负责者和唯一下一步动作。交接前必须更新本字段或留下权威评论。
     validations:
       required: true

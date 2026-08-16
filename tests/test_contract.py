@@ -95,7 +95,7 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(package["kind"], "execution-contract")
         self.assertEqual(package["contractRef"], "exec-agent-contracts-issue-loop-001@1")
         self.assertEqual(package["source"]["issueNumber"], 4)
-        self.assertEqual(package["source"]["remoteVersion"], "2026-08-16T14:27:04Z")
+        self.assertEqual(package["source"]["remoteVersion"], "2026-08-16T14:49:09Z")
         self.assertEqual(
             package["source"]["contentDigest"],
             contract.content_digest(self.runner.execution["body"]),
@@ -119,7 +119,14 @@ class ContractTests(unittest.TestCase):
 
     def test_malformed_issue_form_is_rejected(self) -> None:
         self.runner.execution["body"] = self.runner.execution["body"].replace(
-            "### Stop conditions", "### Unexpected section", 1
+            "### 停止条件", "### 意外段落", 1
+        )
+        with self.assertRaisesRegex(contract.ContractError, "unsupported Issue Form section"):
+            self.capture()
+
+    def test_obsolete_english_heading_is_rejected(self) -> None:
+        self.runner.execution["body"] = self.runner.execution["body"].replace(
+            "### 当前目标", "### Current objective", 1
         )
         with self.assertRaisesRegex(contract.ContractError, "unsupported Issue Form section"):
             self.capture()
@@ -127,7 +134,7 @@ class ContractTests(unittest.TestCase):
     def test_stale_source_is_rejected_before_render(self) -> None:
         package = self.capture()
         receipt = receipt_for(package)
-        self.runner.execution["updatedAt"] = "2026-08-16T14:28:04Z"
+        self.runner.execution["updatedAt"] = "2026-08-16T14:50:09Z"
         with self.assertRaisesRegex(contract.ContractError, "drifted"):
             contract.render_receipt(receipt, package, self.client)
         self.assertFalse(any(call["argv"][:4] == ["gh", "api", "--method", "POST"] for call in self.runner.calls))
@@ -175,51 +182,51 @@ class ContractTests(unittest.TestCase):
         goal = copy.deepcopy(self.runner.goal)
         goal["number"] = 6
         goal["url"] = "https://github.com/zaurakworks/agent-contracts/issues/6"
-        goal["body"] = """### Contract ID
+        goal["body"] = """### 合同 ID
 
 goal-example-001
 
-### Objective
+### 目标
 
-Keep the durable contract authority on GitHub.
+把长期合同权威保留在 GitHub。
 
-### Success criteria
+### 成功标准
 
-- A fresh session can recover from the Goal.
+- 新执行可以从 Goal 恢复工作。
 
-### Authority and references
+### 权威与引用
 
-- https://github.com/zaurakworks/agent-contracts/issues/6 — this Goal.
+- https://github.com/zaurakworks/agent-contracts/issues/6 —— 当前 Goal。
 
-### Allowed actions and writes
+### 允许的动作与写入
 
-- Write this repository on an authorized branch.
+- 在获准分支写入本仓。
 
-### Forbidden actions and writes
+### 禁止的动作与写入
 
-- Modify user-level configuration.
+- 修改用户级配置。
 
-### Dependencies
+### 依赖
 
 None
 
-### Deliverables
+### 交付物
 
-- One reviewed contract artifact.
+- 一份经过评审的合同产物。
 
-### Stop conditions
+### 停止条件
 
-- Authority changes unexpectedly.
+- 权威意外变化。
 
-### Current owner action
+### 当前负责人动作
 
-The maintainer reviews the next bounded Execution Contract."""
+维护者评审下一份边界明确的 Execution Contract。"""
         package = contract.capture_goal(goal)
         self.assertEqual(package["kind"], "goal")
         self.assertEqual(package["dependencies"], [])
         self.assertEqual(
             package["ownerAction"],
-            "The maintainer reviews the next bounded Execution Contract.",
+            "维护者评审下一份边界明确的 Execution Contract。",
         )
 
 
