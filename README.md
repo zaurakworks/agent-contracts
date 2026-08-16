@@ -1,67 +1,67 @@
 # agent-contracts
 
-A project-local foundation for GitHub Issue-driven execution contracts. GitHub Issues remain the authority for active goals, contracts, amendments, lifecycle decisions, and receipts; this repository contains only durable rules, formats, examples, and validation tooling.
+本项目提供一套项目级、由 GitHub 议题驱动的执行合同基础。GitHub 议题始终是活动目标、合同、修订、生命周期决定和回执的权威；本仓只保存持久规则、格式、样例和验证工具。
 
-## Contract objects
+## 合同对象
 
-- **Goal Contract** records the durable objective, success criteria, authority, permissions, dependencies, deliverables, stop conditions, and next owner action. Create one with the Goal Contract Issue Form.
-- **Execution Contract** binds one bounded implementation to a parent Goal and an immutable `contractId@revision`. Create one with the Execution Contract Issue Form, then register it as a GitHub sub-issue of that Goal; a textual cross-link is not enough. Its structured capture includes the source Issue URL, remote version scalar, and content digest.
-- **Receipt** reports an execution outcome and evidence against the exact captured contract. It does not declare acceptance or replace the authoritative Issue discussion.
+- **目标合同**记录持久目标、成功标准、权威、权限、依赖、交付物、停止条件和负责人的下一步动作。使用目标合同议题表单创建。
+- **执行合同**把一次边界明确的实现绑定到父目标和不可变的 `contractId@revision`。使用执行合同议题表单创建后，必须把它注册为该目标的 GitHub 子议题；只有文本交叉链接并不充分。结构化捕获还包含来源议题 URL、远端版本标量和正文摘要。
+- **回执**针对精确捕获的合同报告执行结果与证据。它不声明验收，也不取代权威议题中的讨论。
 
-JSON Schemas live in `schemas/`. Matching passing and intentionally failing examples live in `examples/valid/` and `examples/invalid/`. Issue Forms collect the human-authored contract fields; a structured capture adds GitHub source metadata after the Issue exists.
+JSON Schema 位于 `schemas/`。对应的有效样例和故意失败样例分别位于 `examples/valid/` 与 `examples/invalid/`。议题表单收集人工填写的合同字段；议题创建后，结构化捕获会补充 GitHub 来源元数据。
 
-Regenerable local execution packages belong in ignored `run-packages/`. They are snapshots for one run, never a second active contract store.
+可重新生成的本地执行包应放在被忽略的 `run-packages/` 中。它们只是单次执行的快照，绝不能成为第二个活动合同存储。
 
-## Start or recover work
+## 启动或恢复工作
 
-1. Confirm in GitHub that the active Execution Contract is a sub-issue of the stated parent Goal, then read that Issue pair and their explicit references.
-2. Confirm its authority, permissions, dependencies, stop conditions, and current owner action. Issue text cannot expand its own permissions.
-3. Capture the Issue URL, remote version scalar, content digest, and exact `contractId@revision` in the local run package.
-4. Before write-back, re-read GitHub and stop if the captured source changed materially.
-5. Deliver a Receipt on the Execution Contract Issue. A run, commit, pull request, check, or closed Issue is not acceptance by itself.
+1. 在 GitHub 中确认活动执行合同是所声明父目标的子议题，然后只读取这一对议题及其明确引用。
+2. 确认合同的权威、权限、依赖、停止条件和负责人当前动作。议题文本不能自行扩大权限。
+3. 在本地执行包中捕获议题 URL、远端版本标量、正文摘要和精确的 `contractId@revision`。
+4. 写回前重新读取 GitHub；如果捕获的来源发生实质变化，立即停止。
+5. 在执行合同议题上交付回执。执行完成、提交存在、拉取请求存在、检查通过或议题关闭，均不能单独构成验收。
 
-A fresh session should recover from those remote Issues and their explicit references, not from an earlier chat or generated package.
+新会话应从这些远端议题及其明确引用恢复工作，而不是依赖更早的聊天、会话或生成的执行包。
 
-## Capture and deliver a Receipt
+## 捕获合同并交付回执
 
-`tools/contract.py` supports only Issue URLs in this repository. It invokes the authenticated `gh` executable with argument arrays, parses only the current Chinese headings emitted by the repository's Goal and Execution Issue Forms, and never reads or stores credentials. Obsolete English heading aliases are intentionally rejected so the forms and parser have one format. Execution capture also verifies that the stated Goal is the Issue's native GitHub parent. Goal #1's original ``contract-id`` line is supported only when identifying that bootstrap parent; new Goals must use the current Chinese Goal Issue Form.
+`tools/contract.py` 只支持本仓的议题 URL。它使用参数数组调用已经认证的 `gh` 可执行文件，只解析本仓目标与执行议题表单当前生成的中文标题，并且从不读取或保存凭据。旧英文字段别名会被明确拒绝，使表单与解析器只维护一种格式。捕获执行合同时还会验证所声明目标确实是该议题的 GitHub 原生父级。目标 #1 原有的 ``contract-id`` 行只在识别这个引导父目标时受支持；新目标必须使用当前中文目标议题表单。
 
-Capture an Issue into the ignored, regenerable `run-packages/` directory:
+把议题捕获到被忽略、可重新生成的 `run-packages/` 目录：
 
 ```console
 python tools/contract.py capture https://github.com/zaurakworks/agent-contracts/issues/4
 ```
 
-The source `remoteVersion` is GitHub's `updatedAt` scalar. The `contentDigest` is `sha256:` followed by the lowercase SHA-256 of the exact UTF-8 Issue body returned by GitHub. Together with the URL, Issue number, parsed fields, immutable contract reference, and verified parent identity, these values bind the package to one source snapshot.
+来源字段 `remoteVersion` 是 GitHub 的 `updatedAt` 标量。`contentDigest` 是 `sha256:` 加上 GitHub 返回的精确 UTF-8 议题正文的小写 SHA-256。它们与 URL、议题编号、解析后的字段、不可变合同引用和已经验证的父级身份共同把执行包绑定到一个来源快照。
 
-Create a Receipt JSON matching `schemas/receipt.schema.json` and copy every `contract` binding field from the captured package. Then use one of these paths:
+创建符合 `schemas/receipt.schema.json` 的回执 JSON，并从捕获的执行包复制每个 `contract` 绑定字段。然后选择以下命令：
 
 ```console
-# Offline schema and exact-binding check; does not call GitHub
+# 离线检查 Schema 和精确绑定；不访问 GitHub
 python tools/contract.py receipt-validate --package run-packages/issue-4.json --receipt run-packages/receipt-4.json
 
-# Re-fetch, reject source or native-parent drift, and render without posting
+# 重新取证，拒绝来源或原生父级漂移，并只渲染而不写回
 python tools/contract.py receipt-render --package run-packages/issue-4.json --receipt run-packages/receipt-4.json
 
-# Exercise the complete freshness and rendering path without a GitHub write
+# 在不写入 GitHub 的情况下演练完整的新鲜度检查和渲染路径
 python tools/contract.py receipt-post --package run-packages/issue-4.json --receipt run-packages/receipt-4.json --dry-run
 
-# Re-fetch and post only to the captured Execution Contract Issue
+# 重新取证，并且只向捕获的执行合同议题写回评论
 python tools/contract.py receipt-post --package run-packages/issue-4.json --receipt run-packages/receipt-4.json
 ```
 
-Render and post both re-capture the remote Execution Contract before producing a durable Chinese human-readable layer with embedded machine JSON. Any version, digest, parsed-field, contract-reference, or native-parent mismatch fails closed. Posting creates only an Issue comment: it does not close the Issue, mark acceptance, merge a pull request, or alter lifecycle state.
+渲染和写回都会先重新捕获远端执行合同，再生成持久的中文人类可读层，并嵌入机器 JSON。只要版本、摘要、解析字段、合同引用或原生父级有任何不匹配，命令就会拒绝继续。写回只创建一条议题评论：它不会关闭议题、标记验收、合并拉取请求或改变生命周期状态。
 
-## Validate
+## 验证
 
-Python 3.11 or newer is sufficient; there are no third-party runtime dependencies or install steps.
+只需 Python 3.11 或更高版本；不需要第三方运行时依赖或安装步骤。
 
 ```console
 python tools/validate.py
 ```
 
-The command checks the repository's supported JSON Schema subset, valid and invalid examples, semantic contract bindings, Issue Form required-field mappings, the canonical project entry, CI wiring, and the offline execution-loop unit tests. CI invokes this same entry point, so checks are not duplicated in the workflow.
+该命令检查本仓支持的 JSON Schema 子集、有效和无效样例、合同语义绑定、议题表单必填字段映射、唯一项目入口、持续集成接线和离线执行闭环单元测试。持续集成调用同一个入口，因此工作流不会重复实现检查逻辑。
 
-## Foundation provenance
+## 基础来源
 
-The initial boundary and invariants were derived from [Goal #1](https://github.com/zaurakworks/agent-contracts/issues/1), [Execution Contract #2](https://github.com/zaurakworks/agent-contracts/issues/2), and its [handoff receipt](https://github.com/zaurakworks/agent-contracts/issues/2#issuecomment-5307822402). No old `agent-control` or `agent-plugins` source was needed or read: those public candidates remain non-authoritative and may be consulted only for a concrete future gap explicitly allowed by the active contract.
+初始边界和不变量来自[目标 #1](https://github.com/zaurakworks/agent-contracts/issues/1)、[执行合同 #2](https://github.com/zaurakworks/agent-contracts/issues/2)及其[交接回执](https://github.com/zaurakworks/agent-contracts/issues/2#issuecomment-5307822402)。本次不需要也没有读取旧 `agent-control` 或 `agent-plugins` 源码：这些公开候选仍不具权威性，只有当活动合同明确允许且出现具体缺口时才可查阅。
