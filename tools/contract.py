@@ -228,7 +228,7 @@ def _scalar(value: str, field: str) -> str:
 
 
 def _items(value: str, field: str, allow_none: bool = False) -> list[str]:
-    if allow_none and value.strip().casefold() == "none":
+    if allow_none and value.strip() == "无":
         return []
     items: list[str] = []
     for raw_line in value.splitlines():

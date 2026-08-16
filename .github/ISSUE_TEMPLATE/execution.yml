@@ -92,7 +92,7 @@ body:
     id: dependencies
     attributes:
       label: 依赖
-      description: 列出作为前提的 Issue、决定或产物及其所需状态。没有依赖时填写 None。
+      description: 列出作为前提的 Issue、决定或产物及其所需状态。没有依赖时填写“无”。
     validations:
       required: true
   - type: textarea

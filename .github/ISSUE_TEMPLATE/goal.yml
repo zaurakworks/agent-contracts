@@ -47,14 +47,14 @@ body:
     id: permissionsForbidden
     attributes:
       label: 禁止的动作与写入
-      description: 枚举明确排除的动作。仅当边界已经在上方完整表达时才填写 None。
+      description: 枚举明确排除的动作。仅当边界已经在上方完整表达时才填写“无”。
     validations:
       required: true
   - type: textarea
     id: dependencies
     attributes:
       label: 依赖
-      description: 列出作为前提的 Issue 或决定的 URL 及其所需状态。没有依赖时填写 None。
+      description: 列出作为前提的 Issue 或决定的 URL 及其所需状态。没有依赖时填写“无”。
     validations:
       required: true
   - type: textarea
