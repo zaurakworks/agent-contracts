@@ -413,7 +413,7 @@ def assert_fresh(package: dict[str, Any], client: GhClient) -> None:
         raise ContractError("remote Execution Contract drifted from the captured snapshot")
 
 
-def _markdown_list(values: Sequence[str], empty: str = "None.") -> str:
+def _markdown_list(values: Sequence[str], empty: str = "无。") -> str:
     return "\n".join(f"- {value}" for value in values) if values else f"- {empty}"
 
 
@@ -431,7 +431,7 @@ def render_receipt(
     for artifact in receipt["artifacts"]:
         line = f"- [{artifact['name']}]({artifact['url']})"
         if "commit" in artifact:
-            line += f" at `{artifact['commit']}`"
+            line += f"，commit `{artifact['commit']}`"
         artifacts.append(line)
     verification = [
         f"- `{item['command']}` — {item['result']}" for item in receipt["verification"]
@@ -439,42 +439,43 @@ def render_receipt(
     machine = json.dumps(receipt, ensure_ascii=False, indent=2, sort_keys=True)
     fence = _json_fence(machine)
     source = package["source"]
+    outcome = {"delivered": "已交付", "blocked": "受阻"}[receipt["outcome"]]
     return "\n".join(
         [
-            "## Execution Receipt",
+            "## 执行回执",
             "",
-            f"- Receipt: `{receipt['receiptId']}`",
-            f"- Outcome: **{receipt['outcome']}**",
-            f"- Contract: `{package['contractRef']}`",
-            f"- Captured Issue: [#{source['issueNumber']}]({source['issueUrl']})",
-            f"- Captured version: `{source['remoteVersion']}`",
-            f"- Captured digest: `{source['contentDigest']}`",
-            f"- Submitted at: `{receipt['submittedAt']}`",
+            f"- 回执：`{receipt['receiptId']}`",
+            f"- 结果：**{outcome}**",
+            f"- 合同：`{package['contractRef']}`",
+            f"- 捕获 Issue：[#{source['issueNumber']}]({source['issueUrl']})",
+            f"- 捕获版本：`{source['remoteVersion']}`",
+            f"- 捕获摘要：`{source['contentDigest']}`",
+            f"- 提交时间：`{receipt['submittedAt']}`",
             "",
-            "### Summary",
+            "### 摘要",
             "",
             receipt["summary"],
             "",
-            "### Artifacts",
+            "### 产物",
             "",
-            "\n".join(artifacts) if artifacts else "- None.",
+            "\n".join(artifacts) if artifacts else "- 无。",
             "",
-            "### Verification",
+            "### 验证",
             "",
             "\n".join(verification),
             "",
-            "### Global writes",
+            "### 全局写入",
             "",
             _markdown_list(receipt["globalWrites"]),
             "",
-            "### Remaining unknowns",
+            "### 剩余未知",
             "",
             _markdown_list(receipt["remainingUnknowns"]),
             "",
-            "This Receipt records delivery or a blocker for review. It does not accept the work, close the Issue, or change lifecycle state.",
+            "本 Receipt 仅记录交付或阻塞情况，供负责人评审；不代表验收，也不会关闭 Issue 或改变生命周期状态。",
             "",
             "<details>",
-            "<summary>Machine-readable Receipt JSON</summary>",
+            "<summary>机器可读 Receipt JSON</summary>",
             "",
             f"{fence}json",
             machine,

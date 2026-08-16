@@ -63,19 +63,19 @@ def receipt_for(package: dict[str, Any]) -> dict[str, Any]:
             "contentDigest": source["contentDigest"],
         },
         "outcome": "delivered",
-        "summary": "Delivered the bounded execution loop for review.",
+        "summary": "已交付边界明确的执行闭环，等待评审。",
         "artifacts": [
             {
-                "name": "Draft pull request",
+                "name": "开放的 Draft PR",
                 "url": "https://github.com/zaurakworks/agent-contracts/pull/5",
                 "commit": "0123456789abcdef0123456789abcdef01234567",
             }
         ],
         "verification": [
-            {"command": "python tools/validate.py", "result": "Parent validation pending."}
+            {"command": "python tools/validate.py", "result": "父级验证待进行。"}
         ],
         "globalWrites": [],
-        "remainingUnknowns": ["Maintainer acceptance is pending."],
+        "remainingUnknowns": ["维护者验收待进行。"],
         "submittedAt": "2026-08-16T15:00:00Z",
     }
 
@@ -153,8 +153,10 @@ class ContractTests(unittest.TestCase):
             receipt, package, self.client, dry_run=True
         )
         self.assertIsNone(result)
-        self.assertIn("Machine-readable Receipt JSON", rendered)
-        self.assertIn("does not accept the work, close the Issue", rendered)
+        self.assertIn("## 执行回执", rendered)
+        self.assertIn("机器可读 Receipt JSON", rendered)
+        self.assertIn("不代表验收，也不会关闭 Issue", rendered)
+        self.assertNotIn("## Execution Receipt", rendered)
         self.assertFalse(any(call["argv"][:4] == ["gh", "api", "--method", "POST"] for call in self.runner.calls))
 
     def test_post_uses_captured_issue_and_json_stdin(self) -> None:

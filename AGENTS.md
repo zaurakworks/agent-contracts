@@ -2,6 +2,8 @@
 
 These rules apply only to this repository. `AGENTS.md` is the canonical project entry; other agent entry files must reference it rather than repeat it.
 
+- All human-facing GitHub Issue titles and bodies, pull request titles and bodies, Issue or pull request comments, and the human-readable layer rendered for Receipts must use Chinese. Code identifiers, Schema property names, commands, URLs, commit hashes, and keys inside embedded machine JSON may remain English.
+
 ## Authority and recovery
 
 - The active GitHub Goal or Execution Contract Issue, including authorized amendments in its comments, is the durable authority. Chat, session memory, generated run packages, branches, pull requests, and local files are not lifecycle authority.

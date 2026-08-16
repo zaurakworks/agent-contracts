@@ -50,7 +50,7 @@ python tools/contract.py receipt-post --package run-packages/issue-4.json --rece
 python tools/contract.py receipt-post --package run-packages/issue-4.json --receipt run-packages/receipt-4.json
 ```
 
-Render and post both re-capture the remote Execution Contract before producing durable human-readable text with embedded machine JSON. Any version, digest, parsed-field, contract-reference, or native-parent mismatch fails closed. Posting creates only an Issue comment: it does not close the Issue, mark acceptance, merge a pull request, or alter lifecycle state.
+Render and post both re-capture the remote Execution Contract before producing a durable Chinese human-readable layer with embedded machine JSON. Any version, digest, parsed-field, contract-reference, or native-parent mismatch fails closed. Posting creates only an Issue comment: it does not close the Issue, mark acceptance, merge a pull request, or alter lifecycle state.
 
 ## Validate
 
