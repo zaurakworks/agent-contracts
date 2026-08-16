@@ -1,0 +1,118 @@
+# contract-schema: schemas/execution-contract.schema.json
+name: Execution Contract
+description: Authorize one bounded execution against a parent Goal.
+title: "Execution: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        After creation, register this Issue as a GitHub sub-issue of its parent Goal; a textual link alone is not sufficient. Bind execution to this Issue's exact contract ID and revision. GitHub remains authoritative; local packages and pull requests are not acceptance.
+  - type: input
+    id: contractId
+    attributes:
+      label: Contract ID
+      description: Stable ID beginning with exec-, for example exec-agent-contracts-foundation-001.
+      placeholder: exec-example-001
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Revision
+      description: Positive integer. Material contract changes require an explicit new revision.
+      placeholder: "1"
+    validations:
+      required: true
+  - type: input
+    id: contractRef
+    attributes:
+      label: Immutable contract reference
+      description: Exact contractId@revision binding for this execution.
+      placeholder: exec-example-001@1
+    validations:
+      required: true
+  - type: input
+    id: parentGoal
+    attributes:
+      label: Parent Goal
+      description: URL of the authoritative Goal Contract Issue that will own this Issue as a GitHub sub-issue.
+      placeholder: https://github.com/owner/repository/issues/1
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Current objective
+      description: State the bounded outcome for this execution.
+    validations:
+      required: true
+  - type: textarea
+    id: scopeIn
+    attributes:
+      label: In scope
+      description: List the exact systems, repositories, paths, and operations included.
+    validations:
+      required: true
+  - type: textarea
+    id: scopeOut
+    attributes:
+      label: Out of scope
+      description: List exclusions and non-goals explicitly.
+    validations:
+      required: true
+  - type: textarea
+    id: successCriteria
+    attributes:
+      label: Completion criteria
+      description: List independently observable criteria, one per line.
+    validations:
+      required: true
+  - type: textarea
+    id: authorities
+    attributes:
+      label: Authority and read-only sources
+      description: List the parent Goal, this Issue, and any expressly incorporated URLs with their roles.
+    validations:
+      required: true
+  - type: textarea
+    id: permissionsAllowed
+    attributes:
+      label: Allowed actions and writes
+      description: Enumerate repositories, paths, remote operations, and resources that are authorized.
+    validations:
+      required: true
+  - type: textarea
+    id: permissionsForbidden
+    attributes:
+      label: Forbidden actions and writes
+      description: Enumerate explicit exclusions, including global or cross-repository boundaries.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List prerequisite Issues, decisions, or artifacts with required states. Enter None when empty.
+    validations:
+      required: true
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: List exact files, remote records, branch or PR requirements, and receipt expectations.
+    validations:
+      required: true
+  - type: textarea
+    id: stopConditions
+    attributes:
+      label: Stop conditions
+      description: Include authority drift, permission gaps, and execution-specific blockers.
+    validations:
+      required: true
+  - type: textarea
+    id: ownerAction
+    attributes:
+      label: Current owner action
+      description: Name the responsible actor and the single next action. Update this field or an authoritative comment before handoff.
+    validations:
+      required: true
