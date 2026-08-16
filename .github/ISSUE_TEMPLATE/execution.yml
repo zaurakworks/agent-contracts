@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        创建后，必须把本 Issue 注册为父 Goal 的 GitHub 子 Issue；仅有文本链接并不充分。执行必须绑定本 Issue 精确的合同 ID 与修订版本。GitHub 始终是权威；本地执行包和 Pull Request 不代表验收。
+        创建后，必须把本议题注册为父目标的 GitHub 子议题；仅有文本链接并不充分。执行必须绑定本议题精确的合同 ID 与修订版本。GitHub 始终是权威；本地执行包和拉取请求不代表验收。
   - type: input
     id: contractId
     attributes:
@@ -35,7 +35,7 @@ body:
     id: parentGoal
     attributes:
       label: 父目标
-      description: 将通过 GitHub 原生子 Issue 关系拥有本 Issue 的权威 Goal Contract Issue URL。
+      description: 通过 GitHub 原生子议题关系拥有本议题的权威目标合同议题 URL。
       placeholder: https://github.com/owner/repository/issues/1
     validations:
       required: true
