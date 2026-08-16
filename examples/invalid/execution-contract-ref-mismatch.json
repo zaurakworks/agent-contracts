@@ -28,7 +28,8 @@
     "Release artifacts are ready for review."
   ],
   "authorities": [
-    "https://github.com/zaurakworks/agent-contracts/issues/20"
+    "https://github.com/zaurakworks/agent-contracts/issues/20",
+    "https://github.com/zaurakworks/agent-contracts/issues/19"
   ],
   "permissions": {
     "allowed": [
