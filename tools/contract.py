@@ -447,7 +447,7 @@ def render_receipt(
             f"- 回执：`{receipt['receiptId']}`",
             f"- 结果：**{outcome}**",
             f"- 合同：`{package['contractRef']}`",
-            f"- 捕获 Issue：[#{source['issueNumber']}]({source['issueUrl']})",
+            f"- 捕获议题：[#{source['issueNumber']}]({source['issueUrl']})",
             f"- 捕获版本：`{source['remoteVersion']}`",
             f"- 捕获摘要：`{source['contentDigest']}`",
             f"- 提交时间：`{receipt['submittedAt']}`",

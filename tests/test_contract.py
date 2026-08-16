@@ -155,6 +155,8 @@ class ContractTests(unittest.TestCase):
         self.assertIsNone(result)
         self.assertIn("## 执行回执", rendered)
         self.assertIn("机器可读回执 JSON", rendered)
+        self.assertIn("捕获议题：", rendered)
+        self.assertNotIn("捕获 Issue", rendered)
         self.assertIn("不代表验收，也不会关闭议题", rendered)
         self.assertNotIn("## Execution Receipt", rendered)
         self.assertFalse(any(call["argv"][:4] == ["gh", "api", "--method", "POST"] for call in self.runner.calls))
