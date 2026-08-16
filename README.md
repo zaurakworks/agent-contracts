@@ -22,6 +22,36 @@ Regenerable local execution packages belong in ignored `run-packages/`. They are
 
 A fresh session should recover from those remote Issues and their explicit references, not from an earlier chat or generated package.
 
+## Capture and deliver a Receipt
+
+`tools/contract.py` supports only Issue URLs in this repository. It invokes the authenticated `gh` executable with argument arrays, parses the repository's Goal and Execution Issue Form headings, and never reads or stores credentials. Execution capture also verifies that the stated Goal is the Issue's native GitHub parent. Goal #1's original ``contract-id`` line is supported only when identifying that bootstrap parent; new Goals must use the current Goal Issue Form.
+
+Capture an Issue into the ignored, regenerable `run-packages/` directory:
+
+```console
+python tools/contract.py capture https://github.com/zaurakworks/agent-contracts/issues/4
+```
+
+The source `remoteVersion` is GitHub's `updatedAt` scalar. The `contentDigest` is `sha256:` followed by the lowercase SHA-256 of the exact UTF-8 Issue body returned by GitHub. Together with the URL, Issue number, parsed fields, immutable contract reference, and verified parent identity, these values bind the package to one source snapshot.
+
+Create a Receipt JSON matching `schemas/receipt.schema.json` and copy every `contract` binding field from the captured package. Then use one of these paths:
+
+```console
+# Offline schema and exact-binding check; does not call GitHub
+python tools/contract.py receipt-validate --package run-packages/issue-4.json --receipt run-packages/receipt-4.json
+
+# Re-fetch, reject source or native-parent drift, and render without posting
+python tools/contract.py receipt-render --package run-packages/issue-4.json --receipt run-packages/receipt-4.json
+
+# Exercise the complete freshness and rendering path without a GitHub write
+python tools/contract.py receipt-post --package run-packages/issue-4.json --receipt run-packages/receipt-4.json --dry-run
+
+# Re-fetch and post only to the captured Execution Contract Issue
+python tools/contract.py receipt-post --package run-packages/issue-4.json --receipt run-packages/receipt-4.json
+```
+
+Render and post both re-capture the remote Execution Contract before producing durable human-readable text with embedded machine JSON. Any version, digest, parsed-field, contract-reference, or native-parent mismatch fails closed. Posting creates only an Issue comment: it does not close the Issue, mark acceptance, merge a pull request, or alter lifecycle state.
+
 ## Validate
 
 Python 3.11 or newer is sufficient; there are no third-party runtime dependencies or install steps.
@@ -30,7 +60,7 @@ Python 3.11 or newer is sufficient; there are no third-party runtime dependencie
 python tools/validate.py
 ```
 
-The command checks the repository's supported JSON Schema subset, valid and invalid examples, semantic contract bindings, Issue Form required-field mappings, the canonical project entry, and the CI command. CI invokes this same entry point.
+The command checks the repository's supported JSON Schema subset, valid and invalid examples, semantic contract bindings, Issue Form required-field mappings, the canonical project entry, CI wiring, and the offline execution-loop unit tests. CI invokes this same entry point, so checks are not duplicated in the workflow.
 
 ## Foundation provenance
 

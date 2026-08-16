@@ -55,6 +55,7 @@
         "revision",
         "contractRef",
         "issueUrl",
+        "issueNumber",
         "remoteVersion",
         "contentDigest"
       ],
@@ -73,6 +74,10 @@
         },
         "issueUrl": {
           "$ref": "#/$defs/issueUrl"
+        },
+        "issueNumber": {
+          "type": "integer",
+          "minimum": 1
         },
         "remoteVersion": {
           "$ref": "#/$defs/nonEmptyString"

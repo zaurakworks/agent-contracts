@@ -1,0 +1,8 @@
+{
+  "number": 1,
+  "title": "Goal: establish an Issue-driven execution contract repository",
+  "body": "`contract-id: goal-agent-contracts-001`\n\n## Original goal\n\nGitHub Issues are the durable contract authority for this repository.",
+  "updatedAt": "2026-08-16T14:03:04Z",
+  "url": "https://github.com/zaurakworks/agent-contracts/issues/1",
+  "state": "OPEN"
+}

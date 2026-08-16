@@ -91,19 +91,6 @@
           "$ref": "#/$defs/stringList"
         }
       }
-    },
-    "ownerAction": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["owner", "action"],
-      "properties": {
-        "owner": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "action": {
-          "$ref": "#/$defs/nonEmptyString"
-        }
-      }
     }
   },
   "properties": {
@@ -169,8 +156,7 @@
       "minItems": 1,
       "uniqueItems": true,
       "items": {
-        "type": "string",
-        "format": "uri"
+        "$ref": "#/$defs/nonEmptyString"
       }
     },
     "permissions": {
@@ -190,7 +176,7 @@
       "$ref": "#/$defs/stringList"
     },
     "ownerAction": {
-      "$ref": "#/$defs/ownerAction"
+      "$ref": "#/$defs/nonEmptyString"
     }
   }
 }

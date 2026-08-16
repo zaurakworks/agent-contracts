@@ -1,0 +1,8 @@
+{
+  "number": 4,
+  "title": "Execution: capture contract and post bound Receipt",
+  "body": "### Contract ID\n\nexec-agent-contracts-issue-loop-001\n\n### Revision\n\n1\n\n### Immutable contract reference\n\nexec-agent-contracts-issue-loop-001@1\n\n### Parent Goal\n\nhttps://github.com/zaurakworks/agent-contracts/issues/1\n\n### Current objective\n\nImplement the smallest GitHub-to-local execution loop.\n\n### In scope\n\n- Project-local standard-library CLI and tests in this repository.\n- GitHub access through the authenticated gh executable using argument arrays.\n\n### Out of scope\n\n- Daemons, databases, global installation, and other repositories.\n\n### Completion criteria\n\n- Capture is deterministic and validates the native parent.\n- Receipt delivery rejects remote drift.\n\n### Authority and read-only sources\n\n- https://github.com/zaurakworks/agent-contracts/issues/4 — this Execution Contract.\n- https://github.com/zaurakworks/agent-contracts/issues/1 — parent Goal.\n\n### Allowed actions and writes\n\n- Modify and push a dedicated branch in this repository.\n\n### Forbidden actions and writes\n\n- Merge, close Issues, or modify user-level configuration.\n\n### Dependencies\n\n- Parent Goal #1 remains open.\n\n### Deliverables\n\n- Project-local capture and Receipt CLI with offline tests.\n\n### Stop conditions\n\n- The authoritative Issue changes before write-back.\n\n### Current owner action\n\nA fresh implementation Session delivers the bounded loop without merging.",
+  "updatedAt": "2026-08-16T14:27:04Z",
+  "url": "https://github.com/zaurakworks/agent-contracts/issues/4",
+  "state": "OPEN"
+}

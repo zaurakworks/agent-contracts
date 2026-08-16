@@ -7,6 +7,7 @@
     "revision": 1,
     "contractRef": "exec-release-001@1",
     "issueUrl": "https://github.com/zaurakworks/agent-contracts/issues/20",
+    "issueNumber": 20,
     "remoteVersion": "2026-08-16T16:00:00Z"
   },
   "outcome": "delivered",

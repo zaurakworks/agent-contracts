@@ -3,9 +3,11 @@
 
 from __future__ import annotations
 
+import io
 import json
 import re
 import sys
+import unittest
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -210,6 +212,16 @@ def validate_instance(
     return errors
 
 
+def authority_mentions(entries: list[Any], issue_url: str) -> bool:
+    for entry in entries:
+        if not isinstance(entry, str):
+            continue
+        urls = re.findall(r"https://github\.com/[^\s)>,;]+", entry)
+        if any(url.rstrip(".,") == issue_url for url in urls):
+            return True
+    return False
+
+
 def validate_semantics(instance: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     kind = instance.get("kind")
@@ -223,6 +235,12 @@ def validate_semantics(instance: dict[str, Any]) -> list[str]:
         expected_ref = f"{contract.get('contractId')}@{contract.get('revision')}"
         if contract.get("contractRef") != expected_ref:
             errors.append("$.contract.contractRef: must equal contractId@revision")
+        issue_url = contract.get("issueUrl")
+        issue_number = contract.get("issueNumber")
+        if isinstance(issue_url, str) and isinstance(issue_number, int):
+            url_number = issue_url.rstrip("/").rsplit("/", 1)[-1]
+            if url_number != str(issue_number):
+                errors.append("$.contract: issueNumber must match issueUrl")
 
     source = instance.get("source")
     if isinstance(source, dict):
@@ -233,14 +251,19 @@ def validate_semantics(instance: dict[str, Any]) -> list[str]:
             if url_number != str(issue_number):
                 errors.append("$.source: issueNumber must match issueUrl")
         authorities = instance.get("authorities")
-        if isinstance(issue_url, str) and isinstance(authorities, list) and issue_url not in authorities:
+        if (
+            isinstance(issue_url, str)
+            and isinstance(authorities, list)
+            and not authority_mentions(authorities, issue_url)
+        ):
             errors.append("$.authorities: must include the source Issue URL")
 
     if kind == "execution-contract":
         parent = instance.get("parentGoal")
         authorities = instance.get("authorities")
         if isinstance(parent, dict) and isinstance(authorities, list):
-            if parent.get("issueUrl") not in authorities:
+            parent_url = parent.get("issueUrl")
+            if isinstance(parent_url, str) and not authority_mentions(authorities, parent_url):
                 errors.append("$.authorities: must include the parent Goal Issue URL")
 
     return errors
@@ -379,7 +402,16 @@ def check_project_surface(errors: list[str]) -> None:
         if claude_entry != "@AGENTS.md\n":
             errors.append("CLAUDE.md: must contain only the canonical @AGENTS.md import")
 
-    for required_file in ("AGENTS.md", "README.md"):
+    required_files = (
+        "AGENTS.md",
+        "README.md",
+        "tools/contract.py",
+        "tests/test_contract.py",
+        "tests/fixtures/execution_issue.json",
+        "tests/fixtures/goal_issue.json",
+        "tests/fixtures/native_parent.json",
+    )
+    for required_file in required_files:
         path = ROOT / required_file
         if not path.is_file() or not path.read_text(encoding="utf-8").strip():
             errors.append(f"{required_file}: missing or empty")
@@ -414,6 +446,24 @@ def check_project_surface(errors: list[str]) -> None:
         errors.append("CI must invoke 'python tools/validate.py' exactly once")
 
 
+def check_unit_tests(errors: list[str]) -> int:
+    try:
+        suite = unittest.defaultTestLoader.discover(
+            str(ROOT / "tests"),
+            pattern="test_*.py",
+        )
+    except Exception as exc:
+        errors.append(f"unit test discovery failed: {exc}")
+        return 0
+    stream = io.StringIO()
+    result = unittest.TextTestRunner(stream=stream, verbosity=0).run(suite)
+    for test, traceback in result.failures + result.errors:
+        details = [line for line in traceback.splitlines() if line.strip()]
+        message = details[-1] if details else "unknown failure"
+        errors.append(f"{test.id()}: {message}")
+    return result.testsRun
+
+
 def main() -> int:
     errors: list[str] = []
     schemas: dict[str, dict[str, Any]] = {}
@@ -434,6 +484,7 @@ def main() -> int:
         check_forms(schemas, errors)
         example_count = check_examples(schemas, errors)
     check_project_surface(errors)
+    unit_test_count = check_unit_tests(errors)
 
     if errors:
         print("validation failed:", file=sys.stderr)
@@ -443,7 +494,8 @@ def main() -> int:
 
     print(
         f"validation passed: {len(schemas)} schemas, "
-        f"{example_count} examples, {len(FORM_PATHS)} Issue Forms"
+        f"{example_count} examples, {len(FORM_PATHS)} Issue Forms, "
+        f"{unit_test_count} execution-loop tests"
     )
     return 0
 
