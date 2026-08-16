@@ -1,0 +1,6 @@
+# Regenerable, non-authoritative local execution snapshots
+run-packages/
+
+# Python local artifacts
+__pycache__/
+*.py[cod]

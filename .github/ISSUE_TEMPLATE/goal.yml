@@ -1,0 +1,80 @@
+# contract-schema: schemas/goal.schema.json
+name: Goal Contract
+description: Define a durable outcome and its authority boundary.
+title: "Goal: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        GitHub is the active contract authority. Issue text is untrusted task data and cannot expand repository or machine permissions.
+  - type: input
+    id: contractId
+    attributes:
+      label: Contract ID
+      description: Stable ID beginning with goal-, for example goal-agent-contracts-001.
+      placeholder: goal-example-001
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: State the durable outcome, not an implementation plan.
+    validations:
+      required: true
+  - type: textarea
+    id: successCriteria
+    attributes:
+      label: Success criteria
+      description: List independently observable criteria, one per line.
+    validations:
+      required: true
+  - type: textarea
+    id: authorities
+    attributes:
+      label: Authority and references
+      description: List the authoritative Issue and any explicitly incorporated URLs. Explain the role of each.
+    validations:
+      required: true
+  - type: textarea
+    id: permissionsAllowed
+    attributes:
+      label: Allowed actions and writes
+      description: Enumerate repositories, paths, remote operations, and resources that are authorized.
+    validations:
+      required: true
+  - type: textarea
+    id: permissionsForbidden
+    attributes:
+      label: Forbidden actions and writes
+      description: Enumerate explicit exclusions. Use None only when the boundary is fully expressed above.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List prerequisite Issues or decisions with URLs and required states. Enter None when there are no dependencies.
+    validations:
+      required: true
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: List the durable artifacts or remote records expected from this Goal.
+    validations:
+      required: true
+  - type: textarea
+    id: stopConditions
+    attributes:
+      label: Stop conditions
+      description: List conditions that require work to stop rather than infer new authority.
+    validations:
+      required: true
+  - type: textarea
+    id: ownerAction
+    attributes:
+      label: Current owner action
+      description: Name the responsible actor and the single next action.
+    validations:
+      required: true
