@@ -131,6 +131,13 @@ class ContractTests(unittest.TestCase):
         with self.assertRaisesRegex(contract.ContractError, "unsupported Issue Form section"):
             self.capture()
 
+    def test_obsolete_authority_heading_is_rejected(self) -> None:
+        self.runner.execution["body"] = self.runner.execution["body"].replace(
+            "### 合同状态依据与只读来源", "### 权威与只读来源", 1
+        )
+        with self.assertRaisesRegex(contract.ContractError, "unsupported Issue Form section"):
+            self.capture()
+
     def test_stale_source_is_rejected_before_render(self) -> None:
         package = self.capture()
         receipt = receipt_for(package)
@@ -192,15 +199,15 @@ goal-example-001
 
 ### 目标
 
-把长期合同权威保留在 GitHub。
+把长期合同状态依据保留在 GitHub 议题。
 
 ### 成功标准
 
-- 新执行可以从 Goal 恢复工作。
+- 新执行可以从目标恢复工作。
 
-### 权威与引用
+### 合同状态依据与引用
 
-- https://github.com/zaurakworks/agent-contracts/issues/6 —— 当前 Goal。
+- https://github.com/zaurakworks/agent-contracts/issues/6 —— 当前目标。
 
 ### 允许的动作与写入
 
@@ -220,17 +227,17 @@ goal-example-001
 
 ### 停止条件
 
-- 权威意外变化。
+- 合同状态依据意外变化。
 
 ### 当前负责人动作
 
-维护者评审下一份边界明确的 Execution Contract。"""
+维护者评审下一份边界明确的执行合同。"""
         package = contract.capture_goal(goal)
         self.assertEqual(package["kind"], "goal")
         self.assertEqual(package["dependencies"], [])
         self.assertEqual(
             package["ownerAction"],
-            "维护者评审下一份边界明确的 Execution Contract。",
+            "维护者评审下一份边界明确的执行合同。",
         )
 
 
