@@ -31,8 +31,5 @@
   "stopConditions": [
     "A required change exceeds the permissions recorded by the Goal."
   ],
-  "ownerAction": {
-    "owner": "repository maintainer",
-    "action": "Review the next bounded Execution Contract."
-  }
+  "ownerAction": "The repository maintainer reviews the next bounded Execution Contract."
 }

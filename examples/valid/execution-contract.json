@@ -49,8 +49,5 @@
   "stopConditions": [
     "The authoritative Issue changes materially during execution."
   ],
-  "ownerAction": {
-    "owner": "implementer",
-    "action": "Deliver the foundation through a Draft pull request."
-  }
+  "ownerAction": "The implementer delivers the foundation through a Draft pull request."
 }

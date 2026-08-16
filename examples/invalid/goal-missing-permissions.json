@@ -22,8 +22,5 @@
   "stopConditions": [
     "The source Issue changes."
   ],
-  "ownerAction": {
-    "owner": "implementer",
-    "action": "Begin the migration."
-  }
+  "ownerAction": "The implementer begins the migration."
 }
