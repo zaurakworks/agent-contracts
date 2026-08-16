@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        创建后，必须把本议题注册为父目标的 GitHub 子议题；仅有文本链接并不充分。执行必须绑定本议题精确的合同 ID 与修订版本。GitHub 始终是权威；本地执行包和拉取请求不代表验收。
+        创建后，必须把本议题注册为父目标的 GitHub 子议题；仅有文本链接并不充分。执行必须绑定本议题精确的合同 ID 与修订版本。GitHub 议题始终是本次合同的事实源；本地执行包和拉取请求不代表验收。
   - type: input
     id: contractId
     attributes:
@@ -35,7 +35,7 @@ body:
     id: parentGoal
     attributes:
       label: 父目标
-      description: 通过 GitHub 原生子议题关系拥有本议题的权威目标合同议题 URL。
+      description: 通过 GitHub 原生子议题关系与本议题关联的父目标合同议题 URL。
       placeholder: https://github.com/owner/repository/issues/1
     validations:
       required: true
@@ -70,8 +70,8 @@ body:
   - type: textarea
     id: authorities
     attributes:
-      label: 权威与只读来源
-      description: 列出父 Goal、本 Issue 以及明确纳入的 URL，并说明各自角色。
+      label: 合同状态依据与只读来源
+      description: 列出控制本合同状态的父目标和本议题，以及明确纳入的只读 URL，并说明各自角色。
     validations:
       required: true
   - type: textarea
@@ -92,27 +92,27 @@ body:
     id: dependencies
     attributes:
       label: 依赖
-      description: 列出作为前提的 Issue、决定或产物及其所需状态。没有依赖时填写“无”。
+      description: 列出作为前提的议题、决定或产物及其所需状态。没有依赖时填写“无”。
     validations:
       required: true
   - type: textarea
     id: deliverables
     attributes:
       label: 交付物
-      description: 列出精确文件、远端记录、分支或 PR 要求以及回执预期。
+      description: 列出精确文件、远端记录、分支或拉取请求要求以及回执预期。
     validations:
       required: true
   - type: textarea
     id: stopConditions
     attributes:
       label: 停止条件
-      description: 包括权威漂移、权限缺口和本次执行特有的阻塞条件。
+      description: 包括合同状态依据漂移、权限缺口和本次执行特有的阻塞条件。
     validations:
       required: true
   - type: textarea
     id: ownerAction
     attributes:
       label: 当前负责人动作
-      description: 指明负责者和唯一下一步动作。交接前必须更新本字段或留下权威评论。
+      description: 指明负责者和唯一下一步动作。交接前必须更新本字段或在合同议题留下获准修订评论。
     validations:
       required: true
