@@ -2,6 +2,8 @@
 
 本项目提供一套项目级、由 GitHub 议题驱动的执行合同基础。GitHub 议题始终是活动目标、合同、修订、生命周期决定和回执的合同状态依据；本仓只保存持久规则、格式、样例和验证工具。
 
+> **迁移状态**：当前产品实现已迁入 [`zaurakworks/agent-system/contracts`](https://github.com/zaurakworks/agent-system/tree/main/contracts)。新合同和实现变更进入 `agent-system`；本仓暂时保留开放 Issue、PR 和 Git 历史，直到迁移索引 [`agent-system#70`](https://github.com/zaurakworks/agent-system/issues/70) 中的逐项 successor、真实验证和归档门完成。迁移本身不表示既有事项已验收或关闭。
+
 ## 合同对象
 
 - **目标合同**记录持久目标、成功标准、合同状态依据、权限、依赖、交付物、停止条件和负责人的下一步动作。使用目标合同议题表单创建。
